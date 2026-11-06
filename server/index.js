@@ -145,33 +145,19 @@ app.delete('/api/:table/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // --- SERVE FRONTEND ---
-// TanStack Start outputs to .output/public, standard Vite outputs to dist.
-const possiblePaths = [
-  path.join(__dirname, '../.output/public'),
-  path.join(__dirname, '../dist')
-];
+const distPath = path.join(__dirname, '../dist');
 
-let distPath = null;
-for (const p of possiblePaths) {
-  if (fs.existsSync(path.join(p, 'index.html'))) {
-    distPath = p;
-    break;
-  }
-}
+console.log(`Looking for React build at: ${distPath}`);
 
-if (distPath) {
-  console.log(`✅ Found React build at: ${distPath}`);
-  app.use(express.static(distPath));
-  app.get('/{*splat}', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
-} else {
-  console.log('❌ Could not find index.html.');
-  app.get('/{*splat}', (req, res) => {
-    res.status(404).send('Frontend not built.');
-  });
-}
+// Serve static files
+app.use(express.static(distPath));
+
+// Catch-all route for React Router
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
