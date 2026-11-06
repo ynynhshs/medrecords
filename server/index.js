@@ -145,45 +145,20 @@ app.delete('/api/:table/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// --- SERVE FRONTEND ---
+const distPath = path.join(__dirname, '../.output/public');
 
-// --- SERVE FRONTEND (Smart Search) ---
-function findIndexHtml(dir, depth = 0) {
-  if (depth > 4) return null;
-  try {
-    const files = fs.readdirSync(dir);
-    if (files.includes('index.html')) return dir;
-    for (const file of files) {
-      const fullPath = path.join(dir, file);
-      if (fs.statSync(fullPath).isDirectory()) {
-        // Skip node_modules, .git, and server
-        if (file !== 'node_modules' && file !== '.git' && file !== 'server') {
-          const found = findIndexHtml(fullPath, depth + 1);
-          if (found) return found;
-        }
-      }
-    }
-  } catch (e) {}
-  return null;
-}
+console.log(`Looking for React build at: ${distPath}`);
 
-const distPath = findIndexHtml(path.join(__dirname, '..'));
+// Serve static files
+app.use(express.static(distPath));
 
-if (distPath) {
-  console.log(`✅ Found React build at: ${distPath}`);
-  app.use(express.static(distPath));
-  app.get('/{*splat}', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
-} else {
-  console.log('❌ WARNING: Could not find index.html anywhere.');
-  const rootDir = path.join(__dirname, '..');
-  console.log('Files in root:', fs.readdirSync(rootDir).join(', '));
-  app.get('/{*splat}', (req, res) => {
-    res.status(404).send('Frontend not built. Check server logs for folder locations.');
-  });
-}
+// Catch-all route for React Router
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
-// Start Server (ONLY ONCE, AT THE VERY END)
+// Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`EMR Backend is running on port ${PORT}`);
 });
