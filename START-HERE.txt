@@ -1,0 +1,9 @@
+MedRecords HIS - updated hospital-themed login
+
+To run: install Node.js, open a terminal in this folder, run npm install, then npm run dev. Open the local address printed in the terminal.
+
+Demo accounts: admin / admin123, doctor / doctor123, nurse / nurse123.
+
+This is a browser-local demonstration. It does not have secure online authentication or a shared database. Use made-up sample data only; do not enter real patient information.
+
+The hospital background is an AI-generated illustration.

@@ -1,0 +1,221 @@
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@source "../src";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch.
+ * All colors MUST use oklch format.
+ *
+ * To add a new semantic color:
+ * 1. Add the variable to :root (light value) and .dark (dark value)
+ * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.975 0.008 190);
+  --foreground: oklch(0.22 0.03 220);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.03 220);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.03 220);
+  --primary: oklch(0.55 0.11 190);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0.02 190);
+  --secondary-foreground: oklch(0.25 0.04 210);
+  --muted: oklch(0.95 0.012 190);
+  --muted-foreground: oklch(0.5 0.03 215);
+  --accent: oklch(0.93 0.03 190);
+  --accent-foreground: oklch(0.25 0.04 210);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.015 200);
+  --input: oklch(0.88 0.015 200);
+  --ring: oklch(0.55 0.11 190);
+  --chart-1: oklch(0.55 0.11 190);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.26 0.04 220);
+  --sidebar-foreground: oklch(0.96 0.01 200);
+  --sidebar-primary: oklch(0.75 0.12 185);
+  --sidebar-primary-foreground: oklch(0.2 0.03 220);
+  --sidebar-accent: oklch(0.34 0.05 215);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.75 0.12 185);
+}
+
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
+
+.his-login {
+  --login-ink: oklch(0.28 0.095 258);
+  --login-blue: oklch(0.46 0.18 258);
+  --login-teal: oklch(0.68 0.13 207);
+  --login-light: oklch(0.985 0.008 245);
+  --login-line: oklch(0.82 0.065 245);
+  --login-tint: oklch(0.39 0.145 255);
+  --login-shadow: oklch(0.25 0.08 255 / 28%);
+  --login-gradient: linear-gradient(110deg, var(--login-teal), var(--login-blue));
+  position: relative; isolation: isolate; min-height: 100svh; display: flex; flex-direction: column;
+  background: var(--login-tint); color: var(--login-light); font-family: Arial, sans-serif; letter-spacing: 0;
+}
+.his-hospital, .his-photo-tint { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+.his-hospital { object-fit: cover; object-position: 60% center; }
+.his-photo-tint { z-index: -1; background: linear-gradient(90deg, color-mix(in oklab, var(--login-tint) 97%, transparent) 0%, color-mix(in oklab, var(--login-blue) 72%, transparent) 43%, color-mix(in oklab, var(--login-teal) 15%, transparent) 100%); }
+.his-header { margin: 20px 30px 0; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; background: color-mix(in oklab, var(--login-light) 96%, transparent); color: var(--login-ink); border-radius: 22px; box-shadow: 0 6px 30px var(--login-shadow); }
+.his-brand { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+.his-brand strong { font-size: 25px; display: block; line-height: 1.25; }
+.his-brand small { display: block; font-size: 13px; text-align: center; }
+.his-brand-symbol { position: relative; display: grid; place-items: center; width: 55px; height: 55px; color: var(--login-teal); }
+.his-brand-symbol > svg:first-child { width: 55px; height: 55px; fill: currentColor; stroke-width: 1; }
+.his-brand-symbol > svg:last-child { position: absolute; width: 45px; height: 40px; color: var(--login-light); stroke-width: 1.6; }
+.his-navigation { display: flex; align-items: center; gap: 12px; }
+.his-navigation .his-home { background: color-mix(in oklab, var(--login-teal) 20%, transparent); color: var(--login-blue); border-radius: 24px; }
+.his-navigation button { font-size: 16px; }
+.his-gradient { background: var(--login-gradient); color: var(--login-light); border-radius: 28px; }
+.his-gradient:hover { filter: brightness(1.08); }
+.his-header-signin { padding: 0 24px; height: 44px; font-size: 16px; }
+.his-main { width: 100%; max-width: 1440px; margin: auto; padding: 54px 64px 40px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(350px, 1fr); align-items: center; gap: 50px; }
+.his-college { display: inline-block; border: 1px solid color-mix(in oklab, var(--login-light) 40%, transparent); border-radius: 25px; background: color-mix(in oklab, var(--login-light) 9%, transparent); padding: 9px 18px; font-size: 16px; font-weight: 600; }
+.his-intro h1 { font-size: 62px; line-height: 1.1; font-weight: 750; margin: 16px 0 10px; }
+.his-intro h1 span { color: var(--login-teal); }
+.his-intro h2 { font-size: 31px; line-height: 1.22; font-weight: 650; max-width: 660px; }
+.his-tagline { margin-top: 24px; font-size: 19px; font-weight: 700; }
+.his-description { font-size: 17px; line-height: 1.55; margin-top: 4px; }
+.his-features { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; max-width: 510px; margin-top: 22px; }
+.his-feature { border: 1px solid color-mix(in oklab, var(--login-light) 13%, transparent); background: color-mix(in oklab, var(--login-blue) 55%, transparent); border-radius: 8px; padding: 15px 7px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.his-feature svg { width: 30px; height: 30px; }
+.his-feature span { font-size: 12px; line-height: 1.3; max-width: 85px; font-weight: 600; }
+.his-intro-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+.his-system-button, .his-learn-button { border-radius: 24px; height: 44px; padding: 0 22px; }
+.his-system-button { background: var(--login-light); color: var(--login-ink); }
+.his-system-button:hover { background: var(--login-line); }
+.his-learn-button { background: transparent; color: var(--login-light); border-color: var(--login-light); }
+.his-learn-button:hover { color: var(--login-ink); background: var(--login-light); }
+.his-signin { background: var(--login-light); color: var(--login-ink); border-radius: 24px; padding: 24px 30px 20px; text-align: center; box-shadow: 0 14px 34px var(--login-shadow); }
+.his-heart { color: var(--login-teal); width: 90px; height: 90px; margin: 0 auto 10px; stroke-width: 1.6; }
+.his-signin h2 { font-size: 28px; line-height: 1.25; font-weight: 750; }
+.his-signin-subtitle { font-size: 14px; margin-top: 5px; }
+.his-divider { display: flex; align-items: center; gap: 6px; color: var(--login-teal); margin: 16px 0 20px; }
+.his-divider span, .his-or span { flex: 1; height: 1px; background: var(--login-line); }
+.his-divider svg { height: 30px; width: 32px; }
+.his-form { display: flex; flex-direction: column; gap: 14px; }
+.his-field { min-width: 0; display: flex; align-items: center; gap: 12px; border: 1px solid var(--login-line); border-radius: 14px; height: 48px; padding: 0 14px; color: var(--login-blue); }
+.his-field:focus-within { outline: 2px solid var(--login-teal); outline-offset: 2px; }
+.his-field > svg { width: 20px; height: 20px; flex-shrink: 0; }
+.his-field input { width: 100%; min-width: 0; outline: none; background: transparent; font-size: 16px; color: var(--login-ink); }
+.his-field input::placeholder { color: color-mix(in oklab, var(--login-blue) 65%, var(--login-light)); }
+.his-field button { width: 28px; height: 30px; flex-shrink: 0; }
+.his-submit { height: 50px; font-size: 23px; font-weight: 700; margin-top: 2px; }
+.his-submit svg { width: 24px; height: 24px; }
+.his-error { color: var(--destructive); font-size: 13px; text-align: left; }
+.his-or { display: flex; align-items: center; gap: 12px; margin: 15px 0 12px; font-size: 14px; }
+.his-contact { border-color: var(--login-teal); border-radius: 22px; color: var(--login-blue); background: transparent; width: 90%; font-size: 13px; }
+.his-demo { font-size: 11px; margin-top: 12px; color: var(--login-blue); }
+.his-demo > div { display: flex; justify-content: center; gap: 5px; }
+.his-demo button { color: var(--login-ink); height: 28px; }
+.his-demo-notice { display: flex; justify-content: center; align-items: center; gap: 7px; font-size: 11px; margin-top: 7px; }
+.his-demo-notice svg { width: 17px; height: 17px; color: var(--login-teal); }
+.his-footer { display: flex; justify-content: space-between; gap: 15px; padding: 15px 32px; background: color-mix(in oklab, var(--login-tint) 95%, transparent); font-size: 13px; }
+.his-footer span:last-child { font-family: Georgia, serif; font-style: italic; }
+@media (min-width: 1500px) { .his-main { padding-top: 80px; padding-bottom: 80px; } }
+@media (max-width: 1100px) { .his-header { margin: 16px; padding: 12px 20px; gap: 12px; } .his-navigation { gap: 0; } .his-navigation button { font-size: 14px; padding-inline: 10px; } .his-brand strong { font-size: 21px; } .his-main { padding: 38px 30px; gap: 28px; grid-template-columns: minmax(0, 1fr) minmax(330px, 0.9fr); } .his-intro h1 { font-size: 48px; } .his-intro h2 { font-size: 27px; } .his-college { font-size: 13px; } }
+@media (max-width: 800px) { .his-navigation { display: none; } .his-main { grid-template-columns: 1fr; max-width: 640px; padding: 30px 24px; gap: 32px; } .his-hospital { object-position: 68% center; } .his-photo-tint { background: color-mix(in oklab, var(--login-tint) 80%, transparent); } .his-intro h1 { font-size: 48px; } .his-intro h2 { font-size: 25px; } .his-features { max-width: none; } .his-signin { width: 100%; max-width: 440px; justify-self: center; } .his-footer { flex-direction: column; align-items: center; text-align: center; font-size: 11px; } }
+@media (max-width: 440px) { .his-header { margin: 12px; padding: 12px; border-radius: 16px; } .his-brand { gap: 8px; } .his-brand-symbol, .his-brand-symbol > svg:first-child { width: 34px; height: 38px; } .his-brand-symbol > svg:last-child { width: 28px; height: 28px; } .his-brand strong { font-size: 17px; } .his-brand small { font-size: 10px; } .his-header-signin { padding: 0 12px; font-size: 12px; height: 36px; } .his-main { padding: 24px 20px; } .his-college { font-size: 11px; padding: 8px 12px; } .his-intro h1 { font-size: 39px; } .his-intro h2 { font-size: 23px; } .his-tagline { font-size: 16px; } .his-description { font-size: 15px; } .his-features { gap: 8px; } .his-feature { padding: 12px 3px; } .his-feature span { font-size: 10px; } .his-feature svg { width: 26px; height: 26px; } .his-intro-actions { gap: 8px; } .his-system-button, .his-learn-button { padding: 0 14px; font-size: 12px; } .his-signin { padding: 24px; } }
+@media (prefers-reduced-motion: reduce) { .his-login *, .his-login *::before, .his-login *::after { scroll-behavior: auto !important; transition: none !important; } }
