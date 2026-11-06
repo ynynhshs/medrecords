@@ -13,14 +13,6 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.MONGODB_DB_NAME || 'medilink_lab_dev';
 
-// Connect to MongoDB
-mongoose.connect(MONGODB_URI, { dbName: DB_NAME })
-  .then(() => console.log(`Connected to MongoDB database: ${DB_NAME}`))
-  .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-  });
-
 // --- MODELS ---
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -75,7 +67,6 @@ async function seedAdmin() {
     console.error('Error seeding admin:', error);
   }
 }
-seedAdmin();
 
 // --- API ROUTES ---
 app.post('/api/login', async (req, res) => {
@@ -159,7 +150,19 @@ app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
-// Start Server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`EMR Backend is running on port ${PORT}`);
-});
+// --- START SERVER & CONNECT DB ---
+mongoose.connect(MONGODB_URI, { dbName: DB_NAME })
+  .then(() => {
+    console.log(`Connected to MongoDB database: ${DB_NAME}`);
+    
+    // Seed admin ONLY after connection is fully established
+    seedAdmin(); 
+
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`EMR Backend is running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
