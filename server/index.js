@@ -155,19 +155,28 @@ app.delete('/api/:table/:id', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`EMR Backend is running on port ${PORT}`);
 });
-
 const path = require('path');
+const fs = require('fs');
 
 // --- SERVE REACT FRONTEND ---
-// We point to the 'dist' folder in the root directory
 const distPath = path.join(__dirname, '../dist');
+const indexPath = path.join(distPath, 'index.html');
 
-// Serve the static files (JS, CSS, images)
+// Diagnostic check
+console.log('Looking for React build at:', indexPath);
+if (fs.existsSync(indexPath)) {
+  console.log('✅ Found index.html! Serving React app.');
+} else {
+  console.log('❌ WARNING: index.html not found. The React build might have failed or went to a different folder.');
+}
+
+// Serve static files
 app.use(express.static(distPath));
 
-// Any route that doesn't start with /api should return the React index.html
-app.get('/*splat', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
+// Catch-all route for React Router (TanStack Router). 
+// Note: /{*splat} matches BOTH the root "/" and sub-routes like "/dashboard"
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(indexPath);
 });
 
 // Start Server
