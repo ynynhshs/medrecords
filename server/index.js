@@ -155,3 +155,22 @@ app.delete('/api/:table/:id', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`EMR Backend is running on port ${PORT}`);
 });
+
+const path = require('path');
+
+// --- SERVE REACT FRONTEND ---
+// We point to the 'dist' folder in the root directory
+const distPath = path.join(__dirname, '../dist');
+
+// Serve the static files (JS, CSS, images)
+app.use(express.static(distPath));
+
+// Any route that doesn't start with /api should return the React index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
+// Start Server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`EMR Backend is running on port ${PORT}`);
+});
