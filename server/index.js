@@ -145,8 +145,10 @@ app.delete('/api/:table/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 // --- SERVE FRONTEND ---
-const distPath = path.join(__dirname, '../.output/public');
+const distPath = path.join(__dirname, '../dist');
 
 console.log(`Looking for React build at: ${distPath}`);
 
