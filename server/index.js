@@ -158,26 +158,42 @@ app.listen(PORT, '0.0.0.0', () => {
 const path = require('path');
 const fs = require('fs');
 
-// --- SERVE REACT FRONTEND ---
-const distPath = path.join(__dirname, '../dist');
-const indexPath = path.join(distPath, 'index.html');
+// --- SERVE FRONTEND ---
+// Vite/TanStack Start might output to different folders. Let's check them all.
+const possiblePaths = [
+  path.join(__dirname, '../dist'),
+  path.join(__dirname, '../.output/public'),
+  path.join(__dirname, '../build')
+];
 
-// Diagnostic check
-console.log('Looking for React build at:', indexPath);
-if (fs.existsSync(indexPath)) {
-  console.log('✅ Found index.html! Serving React app.');
-} else {
-  console.log('❌ WARNING: index.html not found. The React build might have failed or went to a different folder.');
+let distPath = null;
+for (const p of possiblePaths) {
+  if (fs.existsSync(path.join(p, 'index.html'))) {
+    distPath = p;
+    break;
+  }
 }
 
-// Serve static files
-app.use(express.static(distPath));
-
-// Catch-all route for React Router (TanStack Router). 
-// Note: /{*splat} matches BOTH the root "/" and sub-routes like "/dashboard"
-app.get('/{*splat}', (req, res) => {
-  res.sendFile(indexPath);
-});
+if (distPath) {
+  console.log(`✅ Found React build at: ${distPath}`);
+  
+  // Serve the static files
+  app.use(express.static(distPath));
+  
+  // Catch-all route for React Router
+  app.get('/{*splat}', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+} else {
+  console.log('❌ WARNING: Could not find index.html in any known build folder.');
+  console.log('Here are the files in the root directory:');
+  console.log(fs.readdirSync(path.join(__dirname, '..')));
+  
+  // Fallback if frontend is missing so the server doesn't crash
+  app.get('/{*splat}', (req, res) => {
+    res.status(404).send('Frontend not built. Check server logs for folder locations.');
+  });
+}
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
