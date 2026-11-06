@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -19,7 +21,7 @@ mongoose.connect(MONGODB_URI, { dbName: DB_NAME })
     process.exit(1);
   });
 
-// --- MODELS (Namespaced to avoid collisions) ---
+// --- MODELS ---
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -76,8 +78,6 @@ async function seedAdmin() {
 seedAdmin();
 
 // --- API ROUTES ---
-
-// Login
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -89,7 +89,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Helper function to map table strings to Models
 function getModel(table) {
   const models = { 
     users: User, 
@@ -102,7 +101,6 @@ function getModel(table) {
   return models[table];
 }
 
-// GET all items for a table
 app.get('/api/:table', async (req, res) => {
   try {
     const model = getModel(req.params.table);
@@ -114,7 +112,6 @@ app.get('/api/:table', async (req, res) => {
   }
 });
 
-// CREATE a new item
 app.post('/api/:table', async (req, res) => {
   try {
     const model = getModel(req.params.table);
@@ -127,7 +124,6 @@ app.post('/api/:table', async (req, res) => {
   }
 });
 
-// UPDATE an item (Using standard Mongoose _id)
 app.put('/api/:table/:id', async (req, res) => {
   try {
     const model = getModel(req.params.table);
@@ -139,7 +135,6 @@ app.put('/api/:table/:id', async (req, res) => {
   }
 });
 
-// DELETE an item
 app.delete('/api/:table/:id', async (req, res) => {
   try {
     const model = getModel(req.params.table);
@@ -151,51 +146,44 @@ app.delete('/api/:table/:id', async (req, res) => {
   }
 });
 
-// Start Server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`EMR Backend is running on port ${PORT}`);
-});
-const path = require('path');
-const fs = require('fs');
-
-// --- SERVE FRONTEND ---
-// Vite/TanStack Start might output to different folders. Let's check them all.
-const possiblePaths = [
-  path.join(__dirname, '../dist'),
-  path.join(__dirname, '../.output/public'),
-  path.join(__dirname, '../build')
-];
-
-let distPath = null;
-for (const p of possiblePaths) {
-  if (fs.existsSync(path.join(p, 'index.html'))) {
-    distPath = p;
-    break;
-  }
+// --- SERVE FRONTEND (Smart Search) ---
+function findIndexHtml(dir, depth = 0) {
+  if (depth > 4) return null;
+  try {
+    const files = fs.readdirSync(dir);
+    if (files.includes('index.html')) return dir;
+    for (const file of files) {
+      const fullPath = path.join(dir, file);
+      if (fs.statSync(fullPath).isDirectory()) {
+        // Skip node_modules, .git, and server
+        if (file !== 'node_modules' && file !== '.git' && file !== 'server') {
+          const found = findIndexHtml(fullPath, depth + 1);
+          if (found) return found;
+        }
+      }
+    }
+  } catch (e) {}
+  return null;
 }
+
+const distPath = findIndexHtml(path.join(__dirname, '..'));
 
 if (distPath) {
   console.log(`✅ Found React build at: ${distPath}`);
-  
-  // Serve the static files
   app.use(express.static(distPath));
-  
-  // Catch-all route for React Router
   app.get('/{*splat}', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
 } else {
-  console.log('❌ WARNING: Could not find index.html in any known build folder.');
-  console.log('Here are the files in the root directory:');
-  console.log(fs.readdirSync(path.join(__dirname, '..')));
-  
-  // Fallback if frontend is missing so the server doesn't crash
+  console.log('❌ WARNING: Could not find index.html anywhere.');
+  const rootDir = path.join(__dirname, '..');
+  console.log('Files in root:', fs.readdirSync(rootDir).join(', '));
   app.get('/{*splat}', (req, res) => {
     res.status(404).send('Frontend not built. Check server logs for folder locations.');
   });
 }
 
-// Start Server
+// Start Server (ONLY ONCE, AT THE VERY END)
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`EMR Backend is running on port ${PORT}`);
 });
