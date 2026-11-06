@@ -166,7 +166,7 @@ const distPath = path.join(__dirname, '../dist');
 app.use(express.static(distPath));
 
 // Any route that doesn't start with /api should return the React index.html
-app.get('*', (req, res) => {
+app.get('/*splat', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
